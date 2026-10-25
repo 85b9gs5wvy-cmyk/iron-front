@@ -2329,6 +2329,146 @@ if(window.ResizeObserver)new ResizeObserver(resize).observe($('view'));
 
 const TIPS=['Crates are first come, first served. Send a buggy to scout for them.','Rockets and Heavy Armor counter tanks. IFVs and artillery shred infantry.','A Rusher AI attacks early. Keep a couple of defenses up before your first factory.','Turtle AIs build deep. Break them with artillery and air.','Veteran units heal when promoted. Keep survivors alive between waves.','Captured derricks pay out. The AI contests them with engineers.'],STY=['Mixed','Balanced','Rusher','Turtle','Air'];
 {let ti=0;const tp=()=>{const e=$('tip');if(e)e.textContent='Tip: '+TIPS[ti++%TIPS.length]};tp();setInterval(tp,6000)}
+/*WILL_UPG v1*/
+/* ---------- Armory: tiered research upgrades (per player, stored on p.upg) ---------- */
+BD.armory={n:['Armory','Arsenal'],w:2,h:2,hp:900,cost:1200,bt:18,pw:-35,vis:5,pre:['fac','radar'],cat:'s'};
+if(!LISTS.s.includes('armory'))LISTS.s.splice(LISTS.s.indexOf('tech')+1,0,'armory');
+if(!SEQ.includes('armory'))SEQ.splice(SEQ.indexOf('radar')+1,0,'armory');
+DESC.armory='Weapons and engineering workshop. Researches permanent upgrades for every unit and structure you own: speed, firepower, armor, economy and production. Tier III needs an Intel Center.';
+ROLE.armory='Upgrades';TIP.armory='Research one upgrade at a time. Weapons and Armor pay off most for a big army, Logistics for a long game.';
+KIN.armory='Blacksmith and University · Age of Empires. Battle Lab · Red Alert 2. Upgrade centers · C&C Generals.';
+DEX.armory='Armies field-upgrade their kit constantly: new optics, reactive armor kits, engine packs and better ammunition.';
+const UPG={
+ inf_spd:{n:'Infantry Drills',g:'spd',c:[400,700,1000],t:[20,28,36],d:'+10% infantry move speed per tier'},
+ veh_spd:{n:'Turbo Engines',g:'spd',c:[500,850,1200],t:[22,30,40],d:'+10% vehicle move speed per tier (Supply Trucks too)'},
+ gath:{n:'Supply Logistics',g:'eco',c:[600,1000,1400],t:[25,35,45],d:'+12% truck loading speed and +8% Depot and Derrick income per tier'},
+ inf_dmg:{n:'Infantry Weapons',g:'dmg',c:[500,850,1200],t:[25,35,45],d:'+12% infantry damage per tier'},
+ veh_dmg:{n:'Vehicle Weapons',g:'dmg',c:[700,1100,1500],t:[28,38,48],d:'+12% vehicle and aircraft damage per tier'},
+ arm:{n:'Composite Armor',g:'arm',c:[700,1100,1600],t:[30,40,50],d:'+1 armor per tier: your units take 8% less damage'},
+ prod:{n:'Assembly Lines',g:'prd',c:[600,1000,1400],t:[25,35,45],d:'+10% production and build queue speed per tier'},
+ eng:{n:'Field Engineering',g:'eng',c:[400,800],t:[18,26],d:'+20% Engineer construction speed per tier'},
+ sight:{n:'Optics',g:'eye',c:[400,800],t:[18,26],d:'+1 sight radius per tier for units and structures'},
+ bhp:{n:'Reinforced Structures',g:'bhp',c:[600,1000],t:[24,34],d:'+15% structure HP per tier'}
+};
+const UPGK=Object.keys(UPG),ROM=['0','I','II','III'],UPGQ=5;
+const ut=(p,k)=>(p&&p.upg&&p.upg[k])||0;
+function U(p){if(!p)return null;let u=p.upg;if(!u||typeof u!=='object')u=p.upg={};for(const k of UPGK)if(typeof u[k]!=='number')u[k]=0;if(!Array.isArray(u.rq))u.rq=[];return u}
+function upgEff(k,t){return{inf_spd:'+'+10*t+'% speed',veh_spd:'+'+10*t+'% speed',gath:'+'+12*t+'% loading, +'+8*t+'% income',inf_dmg:'+'+12*t+'% damage',veh_dmg:'+'+12*t+'% damage',arm:'+'+t+' armor (-'+8*t+'% damage taken)',prod:'+'+10*t+'% build speed',eng:'+'+20*t+'% Engineer build speed',sight:'+'+t+' sight',bhp:'+'+15*t+'% structure HP'}[k]}
+function spdMul(u){const d=UD[u.k],c=d&&d.cat,p=P[u.owner];return c==='i'?1+.1*ut(p,'inf_spd'):c==='v'?1+.1*ut(p,'veh_spd'):1}
+function dmgMul(u){if(!u||isB(u)||!UD[u.k])return 1;const c=UD[u.k].cat,p=P[u.owner];return c==='i'?1+.12*ut(p,'inf_dmg'):1+.12*ut(p,'veh_dmg')}
+function armMul(e){return isB(e)||!UD[e.k]?1:1-.08*ut(P[e.owner],'arm')}
+const prodMulU=p=>1+.1*ut(p,'prod'),bhpMul=p=>1+.15*ut(p,'bhp');
+function upgQd(p,k){const u=p.upg;return u&&u.rq?u.rq.filter(i=>i.k===k).length:0}
+function upgNext(p,k){return ut(p,k)+upgQd(p,k)+1}
+function upgWhy(p,k){const nt=upgNext(p,k),mx=UPG[k].c.length;
+ if(!p.cnt.armory)return 'Needs '+nameOf('armory',p.fac);if(nt>mx)return ut(p,k)>=mx?'Maxed':'All tiers queued';
+ if(nt===3&&!p.cnt.tech)return 'Tier III needs '+nameOf('tech',p.fac);if(p.upg&&p.upg.rq&&p.upg.rq.length>=UPGQ)return 'Queue full';return ''}
+function upgStart(p,k){if(!UPG[k])return 'Unknown';const r=upgWhy(p,k);if(r)return r;U(p).rq.push({k,paid:0,prog:0});return ''}
+function upgCancel(p,k){const u=p.upg;if(!u||!u.rq)return false;for(let i=u.rq.length-1;i>=0;i--)if(u.rq[i].k===k){p.credits+=u.rq[i].paid;u.rq.splice(i,1);return true}return false}
+function upgDone(p,k){
+ if(k==='bhp')for(const b of blds)if(b.owner===p.id&&!b.dead&&BD[b.k]){const nm=Math.round(BD[b.k].hp*bhpMul(p));b.hp=b.hp*nm/b.mhp;b.mhp=nm}
+ if(p.id===0){msg('Research complete: '+UPG[k].n+' '+ROM[ut(p,k)],'good');sfx('ready')}
+}
+function upgTick(p,dt){
+ const u=p.upg;if(!u||!Array.isArray(u.rq)||!u.rq.length)return;const it=u.rq[0],df=UPG[it.k];if(!df){u.rq.shift();return}
+ const cur=u[it.k]||0;if(cur>=df.c.length){p.credits+=it.paid||0;u.rq.shift();return}
+ if(!p.cnt.armory||(cur+1===3&&!p.cnt.tech))return;
+ const c=df.c[cur],T=df.t[cur],spend=Math.min(c*dt/T*(p.low?.5:1),p.credits,c-it.paid);
+ if(spend>0){p.credits-=spend;it.paid+=spend}it.prog=Math.min(1,it.paid/c);
+ if(it.paid>=c-1e-6){u[it.k]=cur+1;u.rq.shift();upgDone(p,it.k)}
+}
+/* AI: research pays as it goes, like production. easy: every 40s, tier I only, needs $400 spare; normal: every 15s, up to tier II, $200; hard: every 6s, up to tier III, $60. One armory per AI. */
+const AIU={iv:[40,15,6],mx:[1,2,3],res:[400,200,60],pr:['veh_dmg','arm','gath','inf_dmg','prod','veh_spd','bhp','inf_spd','sight','eng']};
+function aiUpg(st,dt){const p=P[st.id];if(!p||over)return;const df=clamp(st.diff|0,0,2);
+ st.ut=(typeof st.ut==='number'?st.ut:AIU.iv[df])-dt;if(st.ut>0)return;st.ut=AIU.iv[df];
+ if(!p.cnt.armory)return;const u=U(p);if(u.rq.length)return;
+ let best=null,bt=9;for(const k of AIU.pr){const t=u[k];if(t>=Math.min(AIU.mx[df],UPG[k].c.length))continue;if(t+1===3&&!p.cnt.tech)continue;if(t<bt){bt=t;best=k}}
+ if(!best)return;if(p.credits<AIU.res[df]){st.ut=3;return}upgStart(p,best)}
+{const o=startBuild;startBuild=function(p,k){if(k==='armory'&&p&&ais.some(s=>s.id===p.id)&&(p.q.s.some(i=>i.k==='armory')||blds.some(b=>b.owner===p.id&&b.k==='armory'&&!b.dead)))return false;return o.apply(this,arguments)}}
+function upgTxtK(p,k){const d=UD[k];if(!d||!p||!p.upg)return '';const r=[],c=d.cat;
+ const dm=c==='i'?ut(p,'inf_dmg'):ut(p,'veh_dmg');if(d.w&&dm)r.push('+'+12*dm+'% dmg');
+ const a=ut(p,'arm');if(a)r.push('+'+a+' armor');
+ const s=c==='i'?ut(p,'inf_spd'):c==='v'?ut(p,'veh_spd'):0;if(s)r.push('+'+10*s+'% speed');
+ const v=ut(p,'sight');if(v)r.push('+'+v+' sight');
+ if(k==='harv'&&ut(p,'gath'))r.push(upgEff('gath',ut(p,'gath')));
+ if(k==='eng'&&ut(p,'eng'))r.push('+'+20*ut(p,'eng')+'% build');
+ return r.join(', ')}
+/* hooks: wrap by reassigning the function bindings inside this IIFE */
+{const o=updProd;updProd=function(p,dt){upgTick(p,dt);return o(p,dt*prodMulU(p))}}
+{const o=moveAlong;moveAlong=function(u,d,dt){return o(u,d,dt*spdMul(u))}}
+{const o=fire;fire=function(u,w,tg){const m=dmgMul(u);return o(u,m!==1?Object.assign({},w,{dmg:w.dmg*m}):w,tg)}}
+{const o=dealDmg;dealDmg=function(e,dmg,wh,src){return o(e,e&&!e.dead?dmg*armMul(e):dmg,wh,src)}}
+{const o=updHarv;updHarv=function(u,d,dt){const p=P[u.owner],t=ut(p,'gath');if(!t)return o(u,d,dt);const s=u.hs,c0=p.credits,r=o(u,d,s==='dig'?dt*(1+.12*t):dt);if(s==='unl'){const g=p.credits-c0;if(g>0){p.credits+=g*.08*t;p.stats.mined+=g*.08*t}}return r}}
+{const o=updBld;updBld=function(b,dt){if(b.k!=='derrick'||b.owner===NEU)return o(b,dt);const p=P[b.owner],t=ut(p,'gath');if(!t)return o(b,dt);const c0=p.credits,r=o(b,dt),g=p.credits-c0;if(g>0){p.credits+=g*.08*t;p.stats.mined+=g*.08*t}return r}}
+{const o=updUnit;updUnit=function(u,dt){const od=u.order;if(u.k!=='eng'||!od||od.t!=='build'||!od.tg||!od.tg.site)return o(u,dt);const s=od.tg.site,p0=s.prog,r=o(u,dt),t=ut(P[u.owner],'eng');if(t&&od.tg.site===s&&s.prog>p0)s.prog=Math.min(s.need,s.prog+(s.prog-p0)*.2*t);return r}}
+{const o=mark;mark=function(p,cx,cy,r){return o(p,cx,cy,r+ut(p,'sight'))}}
+{const o=addBld;addBld=function(k,owner,tx,ty,inst){const b=o(k,owner,tx,ty,inst),p=owner!==NEU?P[owner]:null,m=p?bhpMul(p):1;if(m!==1&&BD[k]){b.mhp=b.hp=Math.round(BD[k].hp*m)}return b}}
+{const o=aiThink;aiThink=function(dt){const r=o(dt);for(const st of ais)aiUpg(st,dt);return r}}
+/* drawing: same simple style as the other structures */
+{const o=bTop3;bTop3=function(c,k,W,H,col,b,low,T){if(k!=='armory')return o(c,k,W,H,col,b,low,T);
+ const p=b&&P[b.owner],on=!!(p&&p.upg&&p.upg.rq&&p.upg.rq.length&&!low);
+ gable(c,W,H,12,'#8c8170','#5e5647');box(c,W*.66,H*.06,8,8,18,'#6a5a4c','#4a3d32');
+ rect(c,W*.16,H*.66,W*.34,5,'#2a2f35');rect(c,W*.22,H*.56,W*.22,6,'#4a525a');rect(c,W*.12,H*.56,W*.12,3,'#4a525a');
+ circle(c,W*.66+4-7,H*.06+4-12.6,2.6,on&&(T%20)<10?'#ff9a3a':'#555');
+ mast(c,W-8,H-6,20,col);rect(c,0,H-4,W,3,col)}}
+function upIcon(cv2,k,t){const c=cv2.getContext('2d'),W=cv2.width,H=cv2.height;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,W,H);
+ const bg=c.createRadialGradient(W/2,H*.55,2,W/2,H*.55,W*.65);bg.addColorStop(0,'#16241a');bg.addColorStop(1,'#080c09');c.fillStyle=bg;c.fillRect(0,0,W,H);
+ const g=UPG[k].g,x=W/2,y=H*.45,a='#c9b26b';c.strokeStyle=a;c.fillStyle=a;c.lineWidth=4;c.beginPath();
+ if(g==='spd'){for(const o of[-14,2]){c.moveTo(x+o-6,y-12);c.lineTo(x+o+8,y);c.lineTo(x+o-6,y+12)}c.stroke()}
+ else if(g==='dmg'){c.moveTo(x-16,y+14);c.lineTo(x+16,y-14);c.moveTo(x+16,y+14);c.lineTo(x-16,y-14);c.stroke()}
+ else if(g==='arm'){c.moveTo(x,y-17);c.lineTo(x+15,y-10);c.lineTo(x+12,y+8);c.lineTo(x,y+17);c.lineTo(x-12,y+8);c.lineTo(x-15,y-10);c.closePath();c.stroke()}
+ else if(g==='eco'){c.font='bold 34px monospace';c.textAlign='center';c.fillText('$',x,y+12)}
+ else if(g==='prd'){c.arc(x,y,12,0,7);c.stroke();for(let i=0;i<8;i++){const an=i*Math.PI/4;c.fillRect(x+Math.cos(an)*15-3,y+Math.sin(an)*15-3,6,6)}}
+ else if(g==='eng'){c.moveTo(x-14,y+14);c.lineTo(x+8,y-8);c.stroke();c.beginPath();c.arc(x+10,y-10,7,0,7);c.stroke()}
+ else if(g==='eye'){c.ellipse(x,y,18,10,0,0,7);c.stroke();c.beginPath();c.arc(x,y,5,0,7);c.fill()}
+ else{c.rect(x-14,y-12,28,24);c.stroke();c.beginPath();c.moveTo(x-14,y);c.lineTo(x+14,y);c.moveTo(x,y-12);c.lineTo(x,y);c.stroke()}
+ const n=UPG[k].c.length;for(let i=0;i<n;i++){c.fillStyle=i<t?'#6bd16b':'#2a3a2e';c.fillRect(W/2-n*9+i*18+2,H-14,14,7)}}
+function upgTip(p,k){const df=UPG[k],cur=ut(p,k),mx=df.c.length,nt=upgNext(p,k);
+ let s=df.n+' (tier '+cur+'/'+mx+')\n'+df.d+'\nNow: '+(cur?upgEff(k,cur):'none');
+ if(nt<=mx)s+='\nTier '+ROM[nt]+': '+upgEff(k,nt)+' · $'+df.c[nt-1]+' · '+df.t[nt-1]+'s';else if(cur>=mx)s+='\nFully researched';
+ if(mx>=3)s+='\nTier III requires '+nameOf('tech',p.fac);return s}
+function upgMenu(el){const p=P[0],u=U(p);
+ const sig='wu|'+p.fac+'|'+UPGK.map(k=>u[k]+':'+upgNext(p,k)+':'+upgWhy(p,k)+':'+(p.credits>=(UPG[k].c[upgNext(p,k)-1]||0)?1:0)).join('|');
+ if(el.dataset.wu!==sig){el.dataset.wu=sig;bmSig='wupg';
+  el.innerHTML='<div class="bmh"><span>'+esc(nameOf('armory',p.fac))+' research</span><small>Left click research · Right click cancel</small></div><div class="bmg">'+UPGK.map(k=>{
+   const df=UPG[k],nt=upgNext(p,k),why=upgWhy(p,k),c=df.c[nt-1],blk=why&&why!=='Queue full'&&why!=='All tiers queued';
+   return '<button type="button" class="bi'+(blk?' off':'')+(c&&p.credits<c?' poor':'')+'" data-u="'+k+'" title="'+esc(upgTip(p,k))+'"><canvas data-u="'+k+'" width="104" height="72"></canvas><b>'+esc(df.n)+'</b><em>'+(ut(p,k)>=df.c.length?'MAX':nt>df.c.length?'queued':ROM[nt]+' $'+c)+'</em><i class="pg"></i><span class="ct"></span>'+(blk&&why!=='Maxed'?'<u class="nd">'+esc(why)+'</u>':'')+'</button>'}).join('')+'</div>';
+  el.querySelectorAll('canvas[data-u]').forEach(cv2=>upIcon(cv2,cv2.dataset.u,u[cv2.dataset.u]))}
+ el.querySelectorAll('.bi[data-u]').forEach(b=>{const k=b.dataset.u,n=upgQd(p,k),f=u.rq[0]&&u.rq[0].k===k?u.rq[0]:null;b.querySelector('.ct').textContent=n||'';b.querySelector('.pg').style.transform='scaleY('+(f?1-f.prog:0)+')'})}
+{const o=bmUpd;bmUpd=function(){const el=$('bmenu'),live=running&&!over,own=live?sel.filter(e=>e.owner===0&&!e.dead):[];
+ const ar=own.length&&!own.some(e=>e.k==='eng'||(isB(e)&&['bar','fac','air'].includes(e.k)))?own.find(b=>isB(b)&&b.k==='armory'&&!b.site&&b.sell===0):null;
+ if(!ar){if(el.dataset.wu){el.dataset.wu='';bmSig=''}return o()}
+ el.hidden=false;upgMenu(el)}}
+$('bmenu').addEventListener('click',e=>{const b=e.target.closest('[data-u]');if(!b||!running)return;const r=upgStart(P[0],b.dataset.u);if(r)msg(r,'bad');updSidebar()});
+$('bmenu').addEventListener('contextmenu',e=>{const b=e.target.closest('[data-u]');if(!b)return;e.preventDefault();if(running){upgCancel(P[0],b.dataset.u);updSidebar()}});
+/* sidebar research queue, same markup as the production queue */
+function upgSide(){const pq=$('prodq');if(!pq||!P.length)return;const p=P[0],u=p.upg,rq=u&&Array.isArray(u.rq)?u.rq:[];let el=pq.querySelector('.wupg');
+ if(!rq.length){if(el)el.remove();return}
+ if(!el){el=document.createElement('div');el.className='wupg';el.style.cssText='display:flex;flex-direction:column;gap:5px';pq.appendChild(el)}
+ const it=rq[0],cur=u[it.k]||0,stall=!p.cnt.armory?'no '+nameOf('armory',p.fac):cur+1===3&&!p.cnt.tech?'needs '+nameOf('tech',p.fac):p.low?'low power':'';const seen={};
+ let t='<div class="pt">Research</div>';rq.forEach((q,i)=>{seen[q.k]=(seen[q.k]||0)+1;const tier=(u[q.k]||0)+seen[q.k];t+='<div class="pe" title="'+esc(upgEff(q.k,tier))+'"><span>'+esc(UPG[q.k].n)+' '+ROM[tier]+'<em>'+(i?'queued':stall?stall:Math.round(q.prog*100)+'%')+'</em></span><i><b style="width:'+(i?0:Math.round(q.prog*100))+'%"></b></i></div>'});
+ if(el.dataset.h!==t){el.dataset.h=t;el.innerHTML=t}}
+{const o=updSidebar;updSidebar=function(){const r=o.apply(this,arguments);upgSide();return r}}
+/* unit info panel and structure panel rows */
+function upgSel(s){const box=$('selInfo');if(!box)return;const ords=box.querySelector('.ords'),tg=box.querySelector('.tg');let rows=null,tag='';
+ if(s.length===1){const e=s[0],p=P[e.owner];
+  if(!isB(e)){const t=upgTxtK(p,e.k);if(t){rows=[['Upgrades',t]];tag=t}}
+  else if(e.k==='armory'&&!e.site&&p){const u=U(p),it=u.rq[0],n=UPGK.reduce((a,k)=>a+u[k],0),m=UPGK.reduce((a,k)=>a+UPG[k].c.length,0);
+   rows=[['Research',it?UPG[it.k].n+' '+ROM[(u[it.k]||0)+1]+' '+Math.round(it.prog*100)+'%':'Idle'],['Queue',u.rq.length+' / '+UPGQ],['Completed',n+' / '+m+' tiers']]}}
+ const sig=rows?JSON.stringify(rows):'';
+ if(ords&&ords.dataset.wus===sig)return;
+ box.querySelectorAll('[data-wu]').forEach(n=>n.remove());
+ if(ords){ords.dataset.wus=sig;if(rows)for(const r of rows){const a=document.createElement('span'),b=document.createElement('b');a.dataset.wu=b.dataset.wu=1;a.textContent=r[0];b.textContent=r[1];b.title=r[1];ords.append(a,b)}}
+ if(tg&&tag){const i=document.createElement('i');i.className='g';i.dataset.wu=1;i.textContent='Upgraded';i.title=tag;tg.appendChild(i)}}
+{const o=hudSel;hudSel=function(info,s){const r=o(info,s);if(s.length)upgSel(s);return r}}
+/* build tooltips (intel panel) */
+{const o=lineHtml;lineHtml=function(k){let x='';const p=P[0];
+ if(k==='armory')x='<h4>Research<em>per player, applies to existing and new units</em></h4>'+UPGK.map(q=>'<div class="vet"><b>'+UPG[q].n+' '+ROM[ut(p,q)]+'/'+ROM[UPG[q].c.length]+'</b>'+UPG[q].d+' · $'+UPG[q].c.join(' / ')+' · '+UPG[q].t.join(' / ')+'s</div>').join('');
+ else if(UD[k]){const t=upgTxtK(p,k);if(t)x='<h4>Your upgrades</h4><div class="kin">'+t+'</div>'}
+ return x+o(k)}}
+{const o=buildTimeHtml;buildTimeHtml=function(k){const t=o(k),m=prodMulU(P[0]);return m>1?t+'<br><span style="color:var(--good)">'+UPG.prod.n+' '+ROM[ut(P[0],'prod')]+': +'+Math.round((m-1)*100)+'% speed on every queue</span>':t}}
+window.__wupg={UPG,U,upgStart,upgCancel,upgTick,aiUpg,spdMul,dmgMul,armMul,UD,WD,BD,get sel(){return sel},set sel(v){sel=v},get P(){return P},get units(){return units},get blds(){return blds},get ais(){return ais},get ore(){return ore},get placing(){return placing},addBld,mkUnit,updSidebar,updateCounts,dealDmg,fire,moveAlong,updHarv,updBld,updUnit,updProd,startBuild,canPlace,placeSite,setOrder};
+/*WILL_UPG end*/
 let last=performance.now(),acc=0,fN=0;
 function frame(t){
  window.__ifFC=(window.__ifFC||0)+1;
