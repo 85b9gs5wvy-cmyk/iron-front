@@ -531,6 +531,96 @@ details.more>summary>span:first-child{flex:none}
 #gtoast.on{opacity:1;transform:translate(-50%,0)}
 #bMenu{border-color:var(--amber);color:var(--amber2)}
 @media (pointer:coarse){#bMenu{min-width:64px}}
+/* JESSICA FIX START: e-pause-btn */
+#top:has(#bMenu) #bPause{display:none}
+/* JESSICA FIX END */
+/* JESSICA FIX START: 3-phone-css */
+.jtg{display:none}
+#bmenu.jclosed{display:none!important}
+#bmenu #jBmX{margin-left:auto;min-width:40px;min-height:40px!important;padding:0;font-size:18px;line-height:1;border-color:var(--amber);color:var(--amber2);flex:none}
+#bmenu .bmh:has(#jBmX){padding-right:2px}
+.bi.jhold::after{content:"HOLD";position:absolute;left:0;right:0;top:38%;text-align:center;font:700 12px var(--mono);letter-spacing:.12em;color:#ffe27a;background:rgba(0,0,0,.65);pointer-events:none}
+#selCmd .jbb{display:none;border-color:var(--amber);color:var(--amber2)}
+#view:has(#bmenu.jclosed:not([hidden])) #selCmd .jbb{display:inline-flex;align-items:center}
+@media (max-width:780px),(max-height:500px){
+ /* build menu: one horizontally scrolling row docked at the bottom, collapsible */
+ #bmenu{left:6px;right:6px;bottom:6px;width:auto;min-width:0;box-sizing:border-box}
+ #bmenu .bmh{height:46px;box-sizing:border-box;padding:2px 2px 2px 7px}
+ #bmenu .bmh .tb{min-height:34px!important;padding:2px 10px}
+ #bmenu .bmh small{display:none}
+ #bmenu .bmg{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:66px;grid-template-rows:1fr;height:92px;max-height:none;box-sizing:border-box;overflow-x:auto;overflow-y:hidden;padding:4px;gap:4px;overscroll-behavior:contain}
+ #bmenu .bi{min-height:0;padding:2px}
+ #bmenu .bi b{white-space:normal;overflow:visible;text-overflow:clip;font-size:10px;line-height:1.05;min-height:2.1em;word-break:break-word}
+ #bmenu .bi em{font-size:10px}
+ #bmenu .bi .nd{top:4px;font-size:9px}
+ /* selection panel: slimmer, full names, collapsible, sits above the build menu */
+ #sel{left:6px;bottom:6px;width:min(320px,calc(100% - 12px));max-width:none}
+ #view:has(#bmenu:not([hidden]):not(.jclosed)) #sel{bottom:150px}
+ #sel .jtg{display:block;position:absolute;right:3px;top:3px;min-height:24px!important;min-width:30px;padding:0 6px;font-size:12px;line-height:22px;z-index:1}
+ #sel .sh{padding:4px 40px 4px 6px;gap:6px}
+ #sel .por{width:48px;height:34px}
+ #sel .sn{flex-wrap:wrap;gap:0 6px}
+ #sel .sn b{white-space:normal;overflow:visible;text-overflow:clip;font-size:14px;line-height:1.1}
+ #sel .sn em{font-size:8.5px}
+ #sel .tg{margin:2px 0 3px;min-height:0}
+ #sel .hpb{height:12px}#sel .hpb span{font-size:10px;line-height:12px}
+ #sel .tiles{padding:4px 6px}#sel .tl{width:44px}
+ #selCmd{padding:3px 5px;gap:3px}
+ #selCmd .tb{min-height:30px!important;padding:2px 8px}
+ #sel.jmin .por,#sel.jmin .tg,#sel.jmin .tiles,#sel.jmin .det,#sel.jmin .sn em,#sel.jmin .hpb span{display:none}
+ #sel.jmin .hpb{height:4px}
+ #sel.jmin .sh{padding:3px 40px 3px 6px}
+ /* touch buttons: slim column at the top right, clear of the build menu */
+ #mbar{top:6px;right:6px;bottom:auto;gap:4px}
+ #mbar .tb{min-width:0;width:62px;min-height:32px!important;padding:2px 4px;font-size:10px;line-height:1.1;white-space:normal;letter-spacing:.04em}
+ #camp{right:74px}
+ #hint{bottom:auto;top:6px;max-width:calc(100% - 84px)}
+}
+@media (max-width:780px){
+ /* portrait: panel left, touch column right, build row full width below */
+ #view:has(#bmenu:not([hidden]):not(.jclosed)) #sel{width:calc(100% - 12px)}
+ /* compact header: logo + readouts on one row, buttons on one row */
+ .brand{padding:2px 6px;gap:0}.brand h1{display:none}.brand svg{width:22px;height:22px}
+ #rds{flex-wrap:nowrap}
+ .rd{padding:2px 7px}.rd small{font-size:8px;letter-spacing:.12em}.rd b{font-size:12px}.rd.amber b{font-size:13px}
+ #vObj{max-width:none;font-size:11px;letter-spacing:0}
+ .rd{overflow:hidden;flex:0 1 auto}.rd b{overflow:hidden;text-overflow:ellipsis;letter-spacing:0}
+ #rds .rd:nth-child(2){flex:1 1 auto}
+ #top{width:100%;box-sizing:border-box;margin-left:0;padding:3px 4px;gap:4px;flex-wrap:nowrap;border-top:1px solid var(--edge)}
+ #top .tb{flex:1 1 0;min-width:0;min-height:32px!important;padding:2px 4px;font-size:11px;white-space:nowrap}
+ /* compact sidebar: smaller radar, hide the empty-queue tip */
+ aside{grid-template-columns:78px 1fr;padding:5px;gap:5px;max-height:none}
+ #prodq:has(.none){display:none}
+ #tools .tb{min-height:34px!important}
+}
+@media (max-height:500px){
+ /* landscape phone: one-row header, slimmer sidebar, selection panel beside the build row */
+ header#bar{flex-wrap:nowrap}
+ .brand{padding:2px 8px}.brand svg{width:20px;height:20px}.brand h1{font-size:14px}
+ #rds{flex-wrap:nowrap}
+ .rd{padding:1px 8px}.rd small{font-size:8px;letter-spacing:.12em}.rd b{font-size:12px}.rd.amber b{font-size:13px}
+ #top{padding:2px 6px;flex-wrap:nowrap;gap:4px}
+ #top .tb{min-height:30px!important;padding:2px 8px;font-size:11px}
+ aside{width:184px;padding:6px;gap:5px;overflow-y:auto}
+ #radarbox{width:auto;max-height:42vh;align-self:center}
+ #sel{width:min(250px,40%)}
+ #view:has(#bmenu:not([hidden]):not(.jclosed)) #sel{bottom:6px}
+ #bmenu{left:calc(min(250px,40%) + 12px);right:74px}
+}
+/* JESSICA FIX END */
+/* JESSICA FIX START: p3-phone-css */
+@media (max-width:780px),(max-height:500px){
+ #view.placing #mbar .tb:not(#mCancel){display:none}
+ #view.placing #mCancel{border-color:var(--amber);color:var(--amber2)}
+ #hint{left:6px;transform:none;max-width:calc(100% - 84px);font-size:11px;padding:3px 8px;text-align:left;line-height:1.25}
+}
+@media (max-width:780px){
+ #mbar{gap:3px}
+ #mbar .tb{width:54px;min-height:30px!important;font-size:9.5px}
+ /* the queue list appearing under the map shrank the view and moved the build row under the finger: the cards already show queue and progress */
+ body:has(#bmenu:not([hidden]):not(.jclosed)) #prodq{display:none}
+}
+/* JESSICA FIX END */
 </style>
 <div id="app">
  <header id="bar">
@@ -636,19 +726,19 @@ details.more>summary>span:first-child{flex:none}
      <div class="kick">Controls</div>
      <div class="keys">
       <kbd>Left click / drag</kbd><span>Select units or buildings. Shift adds to the selection, double-click picks all of that type on screen.</span>
-      <kbd>Right click</kbd><span>Move, attack, harvest here, capture (Engineer), board a Transport, repair at a Depot, or set a factory rally point.</span>
+      <kbd>Right click</kbd><span>Move, attack, harvest here, capture (Engineer), <!--/* JESSICA FIX START: p23-help-rc */--><!--/* JESSICA FIX END */-->repair at a Depot, or set a factory rally point.</span>
       <kbd>Builders</kbd><span>Engineers are your builders. Click an Engineer and its build menu opens at the bottom of the screen. Choose a structure, click the map, and your selected Engineers walk over and construct it. Funds are spent when you place it. More Engineers build faster. Right click an unfinished site with Engineers selected to send them to it. Barracks, Motor Pool and Airfield are not usable until finished.</span>
       <kbd>Set rally</kbd><span>Select a Barracks, Motor Pool or Airfield, press Set rally, then click the map. New units go there when they are built. A flag marks each rally point.</span>
       <kbd>Ctrl + right click</kbd><span>Force fire on the ground.</span>
       <kbd>A</kbd><span>Attack-move: next click sends units forward, fighting anything on the way.</span>
-      <kbd>S &nbsp; D &nbsp; X</kbd><span>Stop. Deploy the MCV or unload a Transport. Scatter.</span>
+      <!--/* JESSICA FIX START: p23-help-keys */--><kbd>S &nbsp; X</kbd><span>Stop. Scatter.</span><!--/* JESSICA FIX END */-->
       <kbd>Ctrl+1..9, 1..9</kbd><span>Assign and recall control groups. Press twice to centre the camera.</span>
       <kbd>Arrows, edge, wheel</kbd><span>Scroll the map. Mouse wheel zooms. Click or drag the radar to jump.</span>
       <kbd>Space</kbd><span>Jump to your base, then to the last alert.</span>
       <kbd>T</kbd><span>Open the tech tree. Hover any node to see its full file and its prerequisite chain.</span>
       <kbd>Training</kbd><span>Click a Barracks, Motor Pool or Airfield and its training menu opens at the bottom. Left click a unit to queue it, right click to cancel. Defenses and structures come from an Engineer.</span>
-      <kbd>Sell / Repair</kbd><span>Sidebar buttons. Click a building of yours while the mode is on. Sell refunds half.</span>
-      <kbd>Teams</kbd><span>In 2v2 to 4v4 you command one base. AI allies share your vision and fight your enemies. You win when every enemy Command Post falls, and lose if your whole team is wiped out.</span>
+      <kbd>Sell / Repair</kbd><span>Sidebar buttons. Click a building of yours while the mode is on. Sell refunds half.<!--/* JESSICA FIX START: 5-help */--> A full repair from zero costs about 38% of the price.<!--/* JESSICA FIX END */--></span>
+      <kbd>Teams</kbd><span>In 2v2 to 4v4 you command one base. AI allies share your vision and fight your enemies. <!--/* JESSICA FIX START: 1-help-cp */-->You win when every enemy Command Post falls, and lose when the last Command Post on your team falls. Walls, sites and units do not keep a side in the fight.<!--/* JESSICA FIX END */--></span>
       <kbd>Aircraft</kbd><span>Built at an Airfield. They fly over everything, carry limited ammo and return on their own to rearm and repair. Only Stinger teams, Flak, SAMs and rifles hurt them badly. Flak and SAMs also thin out air raids.</span>
       <kbd>Oil Derricks</kbd><span>Neutral derricks pay $4 a second. Walk a Combat Engineer in to capture one. The enemy will too. Mines stay hidden from the enemy until an Engineer finds them.</span>
       <kbd>G</kbd><span>Cycle rules of engagement for selected units: free fire, hold position, hold fire.</span>
@@ -899,7 +989,7 @@ function findPath(sx,sy,gx,gy){
  while(hn>0){
   const cur=hpop();if(closedA[cur]===pst)continue;closedA[cur]=pst;
   if(cur===gi){best=gi;break}
-  if(++exp>4500)break;
+  /* JESSICA FIX START: c-path-cap */if(++exp>MW*MH)break;/* JESSICA FIX END */
   const cx=cur%MW,cy=(cur/MW)|0;
   for(let k=0;k<8;k++){
    const nx=cx+DX[k],ny=cy+DY[k];if(blocked(nx,ny))continue;
@@ -1082,9 +1172,9 @@ function updUnit(u,dt){
   if(u.rep<=0){const ap=siteApproach(u,b);if(goTo(u,ap[0],ap[1]))u.rep=1}moveAlong(u,d,dt);return
  }
  if(o&&o.t==='capture'){
-  const b=o.tg;if(!b||b.dead||same(b.owner,u.owner)){u.order=null;return}
+  const b=o.tg;if(!b||b.dead||same(b.owner,u.owner)){u.order=null;return}/* JESSICA FIX START: p25-cp-capture */if(b.k==='cy'&&b.hp>=b.mhp*.25){u.order=null;if(u.owner===0)msg('A Command Post can only be captured below 25% integrity','bad');return}/* JESSICA FIX END */
   if(rectD(u.x,u.y,b)<TS*.9){if(b.k==='derrick')P[u.owner].stats.cap=(P[u.owner].stats.cap||0)+1;b.owner=u.owner;b.rally=null;b.dockBy=null;u.dead=true;addFx({t:'ring',x:b.x,y:b.y,life:1,r:50,c:TEAM[u.owner]});msg(u.owner===0?nameOf(b.k,P[0].fac)+' captured':'Enemy engineer captured our '+nameOf(b.k,P[0].fac),u.owner===0?'good':'bad');return}
-  if(u.rep<=0&&goTo(u,b.x,b.y+(b.h*TS/2)+8))u.rep=1;moveAlong(u,d,dt);return;
+  /* JESSICA FIX START: b-capture-approach */if(u.rep<=0){const ap=typeof siteApproach==='function'?siteApproach(u,b):[b.x,b.y+(b.h*TS/2)+8];if(goTo(u,ap[0],ap[1]))u.rep=1}moveAlong(u,d,dt);return;/* JESSICA FIX END */
  }
  if(w&&u.stance!==2){
   if(o&&o.t==='attack'){if(okT(u,o.tg,w))tg=o.tg;else u.order=o=null}
@@ -1111,7 +1201,7 @@ function updUnit(u,dt){
  }
  if(o&&(o.t==='move'||o.t==='amove')){
   if(u.need&&goTo(u,o.x,o.y))u.need=false;
-  if(!u.need){if(!moveAlong(u,d,dt)&&!u.path)u.order=null}
+  /* JESSICA FIX START: p21-move-repath */if(!u.need){if(!moveAlong(u,d,dt)&&!u.path){if(jKeepGoing(u,o))u.need=true;else u.order=null}}/* JESSICA FIX END */
   if(d.tur)u.tf=u.face;
  }
 }
@@ -1121,25 +1211,56 @@ function separate(){
   for(let j=i+1;j<n;j++){const b=units[j];if(b.dead||UD[a.k].air||UD[b.k].air)continue;const dx=b.x-a.x,dy=b.y-a.y;if(Math.abs(dx)>30||Math.abs(dy)>30)continue;const dd=Math.hypot(dx,dy),m=a.r+b.r-1;if(dd<m&&dd>.01){const pu=Math.min((m-dd)*.5,1.6),ux=dx/dd*pu,uy=dy/dd*pu;
     if(!bpx(a.x-ux,a.y-uy)){a.x-=ux;a.y-=uy}if(!bpx(b.x+ux,b.y+uy)){b.x+=ux;b.y+=uy}}else if(dd<=.01){a.x+=rr(-1,1);a.y+=rr(-1,1)}}
  }
- if(tickN%15===0)for(const u of units){if(u.dead)continue;if(u.path&&Math.hypot(u.x-u.lx,u.y-u.ly)<5){u.stuck++;if(u.stuck>=2){u.path=null;u.need=true;u.rep=0}if(u.stuck>=6){u.stuck=0;if(u.order&&u.order.t!=='attack')u.order=null;u.need=false}}else u.stuck=0;u.lx=u.x;u.ly=u.y}
+ if(tickN%15===0)for(const u of units){if(u.dead)continue;if(u.path&&Math.hypot(u.x-u.lx,u.y-u.ly)<5){u.stuck++;if(u.stuck>=2){u.path=null;u.need=true;u.rep=0}/* JESSICA FIX START: p21-jam-nudge */if(u.stuck>=6){u.stuck=0;if(!jUnjam(u)){if(u.order&&u.order.t!=='attack')u.order=null;u.need=false}}/* JESSICA FIX END */}else u.stuck=0;u.lx=u.x;u.ly=u.y}
 }
 
 /* ---------- buildings & production ---------- */
+/* JESSICA FIX START: 2-site-fn */
+// Construction sites are paid in full up front (placeSite), so cancelling refunds everything spent on it.
+function jCancelSite(b){
+ const d=BD[b.k],p=P[b.owner],paid=(b.site&&b.site.paid!=null)?b.site.paid:defOf(b.k).cost;
+ b.sell=-1;b.site=null;b.dead=true;if(p){p.credits+=paid;if(p.stats&&p.stats.built>0)p.stats.built--}
+ for(let y=b.ty;y<b.ty+b.h;y++)for(let x=b.tx;x<b.tx+b.w;x++)occ[y*MW+x]=0;
+ for(const r of d.res||[]){const i=(b.ty+r[1])*MW+b.tx+r[0];if(occ[i]===2)occ[i]=0}
+ for(const u of units)if(u.order&&u.order.tg===b)u.order=null;
+ sel=sel.filter(e=>e!==b);
+ addFx({t:'ring',x:b.x,y:b.y,life:.8,r:40,c:'#ffe27a'});
+ if(b.owner===0){sfx('sell');msg('Construction cancelled, $'+Math.round(paid)+' refunded','good')}
+}
+/* JESSICA FIX END */
+/* JESSICA FIX START: p21-fns */
+// A move/amove that ran out of path while still far from its goal re-paths from where it is.
+// Gives up after 4 re-paths in a row that do not get at least one tile closer (unreachable goal).
+function jKeepGoing(u,o){
+ if(!o||(o.t!=='move'&&o.t!=='amove'))return false;
+ const dd=Math.hypot(o.x-u.x,o.y-u.y);if(dd<TS*2.5)return false;
+ if(o.jBest===undefined||dd<o.jBest-TS){o.jBest=dd;o.jFail=0}else if((o.jFail=(o.jFail||0)+1)>4)return false;
+ return true}
+// A unit jammed in a crowd for ~3 s keeps a far move/amove: nudge it sideways and re-path.
+// Gives up after 6 jams in a row (~18 s) without getting 2 tiles closer.
+function jUnjam(u){
+ const o=u.order;if(!o||(o.t!=='move'&&o.t!=='amove'))return false;
+ const dd=Math.hypot(o.x-u.x,o.y-u.y);if(dd<TS*2.5)return false;
+ if(o.jJB===undefined||dd<o.jJB-TS*2){o.jJB=dd;o.jJam=0}
+ if((o.jJam=(o.jJam||0)+1)>6)return false;
+ for(let i=0;i<6;i++){const a=Math.random()*6.283,nx=u.x+Math.cos(a)*8,ny=u.y+Math.sin(a)*8;if(!bpx(nx,ny)){u.x=nx;u.y=ny;break}}
+ u.path=null;u.need=true;u.rep=0;return true}
+/* JESSICA FIX END */
 function updBld(b,dt){
- const d=BD[b.k];b.cd-=dt;if(b.hurt>0)b.hurt-=dt;if(b.born>0)b.born-=dt;if(b.anim>0)b.anim-=dt;if(b.site)return;
+ const d=BD[b.k];b.cd-=dt;if(b.hurt>0)b.hurt-=dt;if(b.born>0)b.born-=dt;if(b.anim>0)b.anim-=dt;/* JESSICA FIX START: 2-site-sell */if(b.site&&b.sell>0){jCancelSite(b);return}/* JESSICA FIX END */if(b.site)return;
  if(b.sell>0){b.sell-=dt;if(b.sell<=0){b.sell=-1;P[b.owner].credits+=d.cost*.5;for(let y=b.ty;y<b.ty+b.h;y++)for(let x=b.tx;x<b.tx+b.w;x++)occ[y*MW+x]=0;for(const r of d.res||[]){const i=(b.ty+r[1])*MW+b.tx+r[0];if(occ[i]===2)occ[i]=0}b.dead=true;addFx({t:'ring',x:b.x,y:b.y,life:.8,r:40,c:'#ffe27a'});sfx('sell')}return}
  if(b.k==='derrick'&&b.owner!==NEU){const q2=P[b.owner],g=4*dt*q2.incMul;q2.credits+=g;q2.stats.mined+=g}
  if(b.owner===NEU)return;const p=P[b.owner];
  if(b.rev>0)b.rev-=dt;
  if(b.k==='mine'){if(b.born<=0)for(const u of units){if(same(u.owner,b.owner)||u.dead||UD[u.k].air)continue;const dd=Math.hypot(u.x-b.x,u.y-b.y);
-   if(dd<TS*.55){splash(b.x,b.y,TS*1.3,150,'he',b);b.dead=true;addFx({t:'boom',x:b.x,y:b.y,life:.6,r:34,delay:0});sfx('boom',b.x,b.y);if(b.owner===0)msg('Mine detonated, grid '+gridRef(b.x,b.y),'good');break}
+   /* JESSICA FIX START: p27-mine-radius */if(dd<TS*.8){splash/* JESSICA FIX END */(b.x,b.y,TS*1.3,150,'he',b);b.dead=true;addFx({t:'boom',x:b.x,y:b.y,life:.6,r:34,delay:0});sfx('boom',b.x,b.y);if(b.owner===0)msg('Mine detonated, grid '+gridRef(b.x,b.y),'good');break}
    else if(u.k==='eng'&&dd<TS*3)b.rev=2}
   return}
  if(b.k==='rbay'&&!p.low)for(const u of units){if(u.owner!==b.owner||u.dead||u.hp>=u.mhp||UD[u.k].cat!=='v'||Math.hypot(u.x-b.x,u.y-b.y)>TS*3)continue;const ud=UD[u.k],h=Math.min(u.mhp-u.hp,u.mhp*.07*dt),c2=ud.cost*.3*h/u.mhp;if(p.credits<c2)continue;u.hp+=h;p.credits-=c2;if(tickN%8===0)addFx({t:'ring',x:u.x,y:u.y,life:.4,r:12,c:'#6bd16b'})}
  if(b.k==='power'&&!p.low&&Math.random()<dt*1.5)addFx({t:'smoke',x:b.x-b.w*TS*.3,y:b.y-b.h*TS*.25,life:rr(1.5,2.5),r:rr(4,7),vy:-14});
  if(b.hp<b.mhp*.5&&Math.random()<dt*3)addFx({t:'smoke',x:b.x+rr(-b.w,b.w)*TS/3,y:b.y+rr(-b.h,b.h)*TS/3,life:rr(1,2),r:rr(7,12),vy:-16});
  if(b.hp<b.mhp*.25&&Math.random()<dt*4)addFx({t:'boom',x:b.x+rr(-b.w,b.w)*TS/3,y:b.y+rr(-b.h,b.h)*TS/3,life:.4,r:10,delay:0});
- if(b.rep){if(b.hp<b.mhp&&p.credits>1){const hs=b.mhp*.06*dt,cost=d.cost*.12*(hs/b.mhp)*8;b.hp=Math.min(b.mhp,b.hp+hs);p.credits-=cost}else b.rep=false}
+ if(b.rep){if(b.hp<b.mhp&&p.credits>1){const hs=b.mhp*.06*dt,/* JESSICA FIX START: 5-repair */cost=d.cost*.375*(hs/b.mhp);/* JESSICA FIX END */b.hp=Math.min(b.mhp,b.hp+hs);p.credits-=cost}else b.rep=false}
  if(d.wk){const w=WD[d.wk];if(w.pw&&p.low)return;
   if(b.target&&(!okT(b,b.target,w)||ed(b,b.target)>w.rng*TS))b.target=null;
   if(!b.target&&(tickN+b.id)%8===0)b.target=findT(b,w,w.rng);
@@ -1183,7 +1304,7 @@ function spawnUnit(p,k){
 }
 function canPlace(p,k,tx,ty,adj){
  const d=BD[k];
- if(blds.some(m=>m.k==='mine'&&!m.dead&&m.tx>=tx&&m.tx<tx+d.w&&m.ty>=ty&&m.ty<ty+d.h))return false;
+ /* JESSICA FIX START: a-mine-place */if(blds.some(m=>m.k==='mine'&&!m.dead&&(same(m.owner,p.id)||visTo(p,m))&&/* JESSICA FIX END */m.tx>=tx&&m.tx<tx+d.w&&m.ty>=ty&&m.ty<ty+d.h))return false;
  for(let y=ty;y<ty+d.h;y++)for(let x=tx;x<tx+d.w;x++){if(blocked(x,y)||occ[y*MW+x]===2)return false}
  for(const r of d.res||[]){if(blocked(tx+r[0],ty+r[1]))return false}
  /*IFBUILDANY v1*/if(!adj)return true;
@@ -1193,6 +1314,88 @@ function canPlace(p,k,tx,ty,adj){
   if(Math.max(gx,gy)<=4)return true}
  return false;
 }
+/* JESSICA FIX START: p3-core */
+// What the player knows about a tile. Unexplored = unknown = not blocked (nothing is revealed).
+// Explored but fogged = terrain + buildings the player has seen. Visible = the real state.
+function jKnownBlocked(p,x,y,strict){
+ if(x<0||y<0||x>=MW||y>=MH)return true;const i=y*MW+x;
+ if(!p.expl[i])return false;
+ if(blk[i]===1)return true;
+ if(p.vis[i]===1)return occ[i]===1||(strict&&occ[i]===2);
+ for(const b of blds){if(b.dead||b.k==='mine'||!(same(b.owner,p.id)||seenB(b)))continue;
+  if(x>=b.tx&&x<b.tx+b.w&&y>=b.ty&&y<b.ty+b.h)return true;
+  if(strict)for(const r of BD[b.k].res||[])if(b.tx+r[0]===x&&b.ty+r[1]===y)return true}
+ return false}
+const jCanPlaceTrue=canPlace;
+// The player's placement check only uses what the player knows (mines and units only when visible).
+canPlace=function(p,k,tx,ty,adj){
+ if(!p||p.id!==0)return jCanPlaceTrue.apply(this,arguments);
+ const d=BD[k];
+ if(blds.some(m=>m.k==='mine'&&!m.dead&&(same(m.owner,p.id)||visTo(p,m))&&m.tx>=tx&&m.tx<tx+d.w&&m.ty>=ty&&m.ty<ty+d.h))return false;
+ for(let y=ty;y<ty+d.h;y++)for(let x=tx;x<tx+d.w;x++)if(jKnownBlocked(p,x,y,true))return false;
+ for(const r of d.res||[])if(jKnownBlocked(p,tx+r[0],ty+r[1],false))return false;
+ if(!adj)return true;
+ for(const u of units){if(u.dead||UD[u.k].air||same(u.owner,p.id)||!visTo(p,u))continue;if(u.x>=tx*TS&&u.x<(tx+d.w)*TS&&u.y>=ty*TS&&u.y<(ty+d.h)*TS)return false}
+ return true};
+// The real check, used when the Engineer arrives (includes hidden mines, units and buildings).
+function jCanPlaceReal(p,k,tx,ty){const d=BD[k];
+ if(blds.some(m=>m.k==='mine'&&!m.dead&&m.tx>=tx&&m.tx<tx+d.w&&m.ty>=ty&&m.ty<ty+d.h))return false;
+ return jCanPlaceTrue(p,k,tx,ty,true)}
+let jPend=[],jPendId=0;
+const jGrid=(tx,ty)=>String.fromCharCode(65+Math.min(25,Math.floor(tx/Math.max(1,MW/8))))+(1+Math.floor(ty/Math.max(1,MH/8)));
+function jSiteHasEng(b){return units.some(u=>!u.dead&&u.order&&u.order.t==='build'&&u.order.tg===b)}
+function jMakeSite(p,k,tx,ty){const df=defOf(k),b=addBld(k,p.id,tx,ty,false);b.site={prog:0,need:Math.max(6,(df.bt||10)*1.4)};b.hp=Math.max(1,b.mhp*.1);b.born=0;p.stats.built++;
+ for(const u of units){if(u.x/TS>=tx-.2&&u.x/TS<=tx+b.w+.2&&u.y/TS>=ty-.2&&u.y/TS<=ty+b.h+.2){const f=nearestFree(clamp(u.x/TS|0,0,MW-1),clamp(u.y/TS|0,0,MH-1),6);if(f){u.x=(f[0]+.5)*TS;u.y=(f[1]+.5)*TS}}}
+ return b}
+function jPendEnd(pm,why){const i=jPend.indexOf(pm);if(i<0)return;jPend.splice(i,1);const p=P[pm.owner];if(p)p.credits+=pm.cost;
+ for(const u of units)if(u.order&&u.order.jPend===pm)u.order=null;
+ if(pm.owner===0)msg(nameOf(pm.k,p.fac)+' at '+jGrid(pm.tx,pm.ty)+' cancelled: '+why+'. $'+pm.cost+' refunded','bad')}
+function jPendArrive(pm,u){const p=P[pm.owner];
+ if(!jCanPlaceReal(p,pm.k,pm.tx,pm.ty)){jPendEnd(pm,'the ground is blocked');return}
+ const i=jPend.indexOf(pm);jPend.splice(i,1);const b=jMakeSite(p,pm.k,pm.tx,pm.ty);b.jPaid=pm.cost;
+ for(const e of units)if(!e.dead&&e.order&&e.order.jPend===pm)setOrder(e,{t:'build',tg:b});
+ if(pm.owner===0){sfx('place');msg(nameOf(pm.k,p.fac)+' site started at '+jGrid(pm.tx,pm.ty),'good')}}
+// A placement far from the Engineer, or on ground the player cannot fully see, only makes a planned marker:
+// the money is held, the Engineer walks over, and the site (with HP) appears when it arrives.
+{const o=placeSite;placeSite=function(p,k,tx,ty){
+ if(!p||p.id!==0)return o.apply(this,arguments);
+ const df=defOf(k),d=BD[k];if(p.credits<df.cost){msg('Not enough funds','bad');return false}
+ if(!canPlace(p,k,tx,ty,true))return false;
+ const fb={tx,ty,w:d.w,h:d.h,x:(tx+d.w/2)*TS,y:(ty+d.h/2)*TS};
+ const ss=sel.filter(u=>u.k==='eng'&&!u.dead&&u.owner===p.id);
+ const pick=ss.length?ss:units.filter(u=>u.owner===p.id&&u.k==='eng'&&!u.dead).sort((a,c)=>Math.hypot(a.x-fb.x,a.y-fb.y)-Math.hypot(c.x-fb.x,c.y-fb.y)).slice(0,2);
+ let seen=true;for(let y=ty;y<ty+d.h&&seen;y++)for(let x=tx;x<tx+d.w;x++)if(p.vis[y*MW+x]!==1){seen=false;break}
+ const near=pick.some(u=>rectD(u.x,u.y,fb)<=6*TS);
+ // near and fully visible: build at once (a hidden mine there goes the planned route and is refunded on arrival, so nothing leaks)
+ if(!pick.length||(seen&&near&&jCanPlaceReal(p,k,tx,ty)))return o.apply(this,arguments);
+ p.credits-=df.cost;const pm={id:++jPendId,owner:p.id,k,tx,ty,w:d.w,h:d.h,cost:df.cost};jPend.push(pm);
+ for(const u of pick){const ap=siteApproach(u,fb);setOrder(u,{t:'move',x:ap[0],y:ap[1],jPend:pm})}
+ sfx('place');msg(nameOf(k,p.fac)+' planned at '+jGrid(tx,ty)+': Engineer on the way, $'+df.cost+' held','good');return true}}
+{const o=updUnit;updUnit=function(u,dt){
+ const od=u.order;
+ if(od&&od.jPend&&!u.dead){let pm=od.jPend;
+  if(!jPend.includes(pm)){const f=jPend.find(x=>x.id===pm.id&&x.owner===pm.owner);if(f)pm=od.jPend=f;else if(pm.k&&BD[pm.k]&&Number.isFinite(pm.cost)){jPend.push(pm);jPendId=Math.max(jPendId,pm.id|0)}else{u.order=null;pm=null}}
+  if(pm&&rectD(u.x,u.y,{tx:pm.tx,ty:pm.ty,w:pm.w,h:pm.h})<TS*1.6){jPendArrive(pm,u);return o.apply(this,arguments)}}
+ if(od&&od.jPend&&!u.dead){const pm=od.jPend,r=o.apply(this,arguments);if(!u.order&&jPend.includes(pm)&&!units.some(e=>e!==u&&!e.dead&&e.order&&e.order.jPend===pm)){if(rectD(u.x,u.y,{tx:pm.tx,ty:pm.ty,w:pm.w,h:pm.h})<TS*3)jPendArrive(pm,u);else jPendEnd(pm,'the Engineer could not reach it')}return r}
+ if(od&&od.t==='build'&&u.owner===0&&od.tg&&od.tg.dead&&!od.tg.jDeadMsg){od.tg.jDeadMsg=1;msg(nameOf(od.tg.k,P[0].fac)+' site was destroyed. Engineer standing by','bad')}
+ return o.apply(this,arguments)}}
+function jTick(){
+ for(const pm of jPend.slice()){const any=units.some(u=>!u.dead&&u.order&&u.order.jPend===pm);
+  if(!any)jPendEnd(pm,pm.lost?'the Engineer was lost':'the Engineer got other orders')}
+ if(tickN%15)return;
+ for(const b of blds){if(!b.site||b.dead||b.owner===NEU)continue;
+  if(jSiteHasEng(b)){b.jNeed=false;b.jMsg=0;continue}
+  const idle=units.filter(u=>!u.dead&&u.owner===b.owner&&u.k==='eng'&&!u.order&&rectD(u.x,u.y,b)<=12*TS).sort((a,c)=>rectD(a.x,a.y,b)-rectD(c.x,c.y,b));
+  if(idle.length){setOrder(idle[0],{t:'build',tg:b});b.jNeed=false;b.jMsg=0;if(b.owner===0)msg('Engineer picked up the '+nameOf(b.k,P[0].fac)+' site','good')}
+  else{b.jNeed=true;if(b.owner===0&&!b.jMsg){b.jMsg=1;msg(nameOf(b.k,P[0].fac)+' site at '+jGrid(b.tx,b.ty)+' needs an Engineer','bad')}}}}
+{const o=updCrates;updCrates=function(){const r=o.apply(this,arguments);jTick();return r}}
+{const o=kill;kill=function(e){if(e&&e.order&&e.order.jPend)e.order.jPend.lost=1;return o.apply(this,arguments)}}
+// Owner-only drawing: planned markers, and a "NEEDS ENGINEER" tag on orphaned sites.
+function jDrawPend(ctx){
+ for(const pm of jPend){if(pm.owner!==0)continue;const x=pm.tx*TS,y=pm.ty*TS,w=pm.w*TS,h=pm.h*TS;ctx.save();ctx.fillStyle='rgba(255,210,58,.10)';ctx.fillRect(x,y,w,h);ctx.strokeStyle='rgba(255,210,58,.85)';ctx.setLineDash([3,5]);ctx.lineWidth=1.5;ctx.strokeRect(x+1,y+1,w-2,h-2);ctx.setLineDash([]);ctx.fillStyle='#ffd23a';ctx.font='600 9px sans-serif';ctx.textAlign='center';ctx.fillText('PLANNED',x+w/2,y+h/2+3);ctx.restore()}
+ for(const b of blds)if(b.site&&!b.dead&&b.owner===0&&b.jNeed){ctx.save();ctx.fillStyle='#ff6a5a';ctx.font='700 9px sans-serif';ctx.textAlign='center';ctx.fillText('NEEDS ENGINEER',b.x,b.ty*TS-4);ctx.restore()}}
+{const o=startGame;startGame=function(){jPend=[];return o.apply(this,arguments)}}
+/* JESSICA FIX END */
 function placeSite(p,k,tx,ty){
  const df=defOf(k);if(p.credits<df.cost){msg('Not enough funds','bad');return false}
  if(!canPlace(p,k,tx,ty,true))return false;
@@ -1319,7 +1522,7 @@ function step(){
  aiThink(TICK);
  units=units.filter(u=>!u.dead);blds=blds.filter(b=>!b.dead);
  if(!over&&tickN%10===0){
-  const live=b=>b.owner!==NEU&&b.k!=='derrick'&&b.k!=='mine',a=blds.some(b=>live(b)&&same(0,b.owner)),e=blds.some(b=>live(b)&&!same(0,b.owner));
+  /* JESSICA FIX START: 1-win-cp */const live=b=>b.owner!==NEU&&b.k==='cy'&&!b.dead&&!b.site/* JESSICA FIX END */,a=blds.some(b=>live(b)&&same(0,b.owner)),e=blds.some(b=>live(b)&&!same(0,b.owner));
   if(!a||!e){over={win:!e&&a};window.__end(over.win)}
  }
 }
@@ -1598,7 +1801,7 @@ function render(){
  for(const e of sel){if(isB(e)&&!e.dead){ctx.strokeStyle='#fff';ctx.lineWidth=2;const x=e.tx*TS,y=e.ty*TS,w=e.w*TS,h=e.h*TS,l=9;ctx.beginPath();for(const[cx,cy,dx,dy]of[[x,y,1,1],[x+w,y,-1,1],[x,y+h,1,-1],[x+w,y+h,-1,-1]]){ctx.moveTo(cx+dx*l,cy);ctx.lineTo(cx,cy);ctx.lineTo(cx,cy+dy*l)}ctx.stroke();
    if(e.rally){ctx.strokeStyle='rgba(255,255,255,.5)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.rally.x,e.rally.y);ctx.stroke();ctx.setLineDash([]);circle(ctx,e.rally.x,e.rally.y,4,TEAM[0])}}}
  for(const b of blds)if(b.owner===0&&b.rally&&!b.dead){const f=sel.includes(b),rx=b.rally.x,ry=b.rally.y;ctx.save();ctx.strokeStyle=TEAM[0];ctx.fillStyle=TEAM[0];ctx.lineWidth=2;ctx.globalAlpha=f?1:.6;if(!f){ctx.setLineDash([3,5]);ctx.globalAlpha=.25;ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.lineTo(rx,ry);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=.7}ctx.beginPath();ctx.moveTo(rx,ry);ctx.lineTo(rx,ry-16);ctx.stroke();ctx.beginPath();ctx.moveTo(rx,ry-16);ctx.lineTo(rx+11,ry-12);ctx.lineTo(rx,ry-8);ctx.closePath();ctx.fill();ctx.restore()}
- for(const b of blds)if(b.site&&!b.dead){const x=b.tx*TS,y=b.ty*TS,w=b.w*TS,h=b.h*TS,f=b.site.prog/b.site.need;ctx.save();ctx.fillStyle='rgba(0,0,0,.4)';ctx.fillRect(x,y,w,h);ctx.strokeStyle='#ffd23a';ctx.setLineDash([6,4]);ctx.lineWidth=2;ctx.strokeRect(x,y,w,h);ctx.setLineDash([]);ctx.fillStyle='#000';ctx.fillRect(x,y+h+3,w,5);ctx.fillStyle='#ffd23a';ctx.fillRect(x,y+h+3,w*f,5);ctx.restore()}
+ /* JESSICA FIX START: p3-site-draw */jDrawPend(ctx);for(const b of blds)if(b.site&&!b.dead&&(b.owner===0||seenB(b))){/* JESSICA FIX END */const x=b.tx*TS,y=b.ty*TS,w=b.w*TS,h=b.h*TS,f=b.site.prog/b.site.need;ctx.save();ctx.fillStyle='rgba(0,0,0,.4)';ctx.fillRect(x,y,w,h);ctx.strokeStyle='#ffd23a';ctx.setLineDash([6,4]);ctx.lineWidth=2;ctx.strokeRect(x,y,w,h);ctx.setLineDash([]);ctx.fillStyle='#000';ctx.fillRect(x,y+h+3,w,5);ctx.fillStyle='#ffd23a';ctx.fillRect(x,y+h+3,w*f,5);ctx.restore()}
  for(const c of crates){if(!p0.expl[(c.y/TS|0)*MW+(c.x/TS|0)])continue;const bob=Math.sin(tickN*.1+c.x)*2,pl=.5+.5*Math.sin(tickN*.15);
   ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(c.x,c.y+8,11,4,0,0,7);ctx.fill();
   ctx.fillStyle='rgba(255,226,122,'+(.12+.12*pl)+')';ctx.beginPath();ctx.arc(c.x,c.y-4+bob,20+pl*4,0,7);ctx.fill();
@@ -1623,7 +1826,7 @@ function render(){
  for(const b of bl){if(b.owner===0&&!selSet.has(b)&&b.hp>=b.mhp&&!b.rep)continue;if(b.owner!==0&&b.hp>=b.mhp)continue;const w=b.w*TS,f=b.hp/b.mhp;rect(ctx,b.tx*TS,b.ty*TS-8,w,5,'#000');rect(ctx,b.tx*TS+1,b.ty*TS-7,(w-2)*f,3,f>.5?'#6bd16b':f>.25?'#e8c23a':'#ff5a4a');if(b.rep)rect(ctx,b.tx*TS+w-8,b.ty*TS-14,6,6,'#ffd23a')}
  // placement ghost
  if(placing&&mouse.in){const d=BD[placing.k],g=ghostPos(placing.k),ok=canPlace(p0,placing.k,g[0],g[1],true);
-  for(let y=0;y<d.h;y++)for(let x=0;x<d.w;x++){const bx=g[0]+x,by=g[1]+y,fine=!blocked(bx,by)&&occ[Math.max(0,Math.min(NN-1,by*MW+bx))]!==2;rect(ctx,bx*TS,by*TS,TS,TS,ok&&fine?'rgba(80,255,120,.35)':'rgba(255,70,60,.4)')}
+  for(let y=0;y<d.h;y++)for(let x=0;x<d.w;x++){const bx=g[0]+x,by=g[1]+y,/* JESSICA FIX START: p3-ghost-tile */fine=!jKnownBlocked(p0,bx,by,true);/* JESSICA FIX END */rect(ctx,bx*TS,by*TS,TS,TS,ok&&fine?'rgba(80,255,120,.35)':'rgba(255,70,60,.4)')}
   for(const r of d.res||[])rect(ctx,(g[0]+r[0])*TS,(g[1]+r[1])*TS,TS,TS,'rgba(255,220,80,.18)');
   ctx.strokeStyle=ok?'#6bff8c':'#ff6a5a';ctx.lineWidth=2;ctx.strokeRect(g[0]*TS,g[1]*TS,d.w*TS,d.h*TS)}
  // box select
@@ -1648,7 +1851,7 @@ function orderText(u){
  if(UD[u.k].air&&u.land)return'Landed at Airfield';if(u.rtb)return'Returning to rearm';
  if(u.k==='harv'){if(u.order&&u.order.t==='move')return'Moving';return{seek:'Finding ore',go:'Driving to field',dig:'Harvesting',ret:'Returning to depot',unl:'Unloading'}[u.hs]||'Idle'}
  const o=u.order,fo=t=>nameOf(t.k,P[t.owner]?P[t.owner].fac:0);
- if(o){if(o.t==='move')return'Moving';if(o.t==='amove')return'Attack-move';if(o.t==='attack'&&o.tg)return'Attacking '+fo(o.tg);if(o.t==='capture'&&o.tg)return'Capturing '+fo(o.tg);if(o.t==='build'&&o.tg)return'Building '+fo(o.tg)}
+ if(o){/* JESSICA FIX START: p3-order-text */if(o.t==='move'&&o.jPend)return'Going to build '+nameOf(o.jPend.k,P[0].fac);/* JESSICA FIX END */if(o.t==='move')return'Moving';if(o.t==='amove')return'Attack-move';if(o.t==='attack'&&o.tg)return'Attacking '+fo(o.tg);if(o.t==='capture'&&o.tg)return'Capturing '+fo(o.tg);if(o.t==='build'&&o.tg)return'Building '+fo(o.tg)}
  if(u.target&&!u.target.dead)return'Engaging';return'Idle';
 }
 function hudSel(info,s){
@@ -1676,14 +1879,14 @@ function hudSel(info,s){
    ln.push(['Order',orderText(e)],['Grid',gridRef(e.x,e.y)]);if(df.air&&e.wk)ln.push(['Ammo',Math.floor(e.ammo)+' / '+df.ammo]);
    if(e.wk){const nx=e.rank===0?3:e.rank===1?8:0;ln.push(['Kills',e.kills+(nx?' / '+nx+' to promotion':' (top rank)')])}
   }else{
-   ln.push(['Value','$'+Math.round(df.cost*.5)+' if sold']);
+   /* JESSICA FIX START: 2-site-value *//* JESSICA FIX START: p3-site-status */if(e.site&&e.owner===0)ln.push(['Status',jSiteHasEng(e)?'Under construction':'Needs an Engineer']);/* JESSICA FIX END */ln.push(['Value',e.site?'$'+df.cost+' back if cancelled':'$'+Math.round(df.cost*.5)+' if sold']);/* JESSICA FIX END */
    const qc=e.k==='bar'?'i':e.k==='fac'?'v':e.k==='air'?'a':null;
    if(qc){const q=p0.q[qc],n=p0.cnt[e.k]||1;ln.push(['Output','×'+(1+.35*(n-1)).toFixed(2)+' speed'],['Queue',q.length?nameOf(q[0].k,fac)+' '+Math.round(q[0].prog*100)+'%'+(q.length>1?' +'+(q.length-1):''):'Idle'],['Rally',e.rally?'Set':'Use Set rally'])}
    else if(e.k==='ref'){ln.push(['Trucks',units.filter(u=>u.owner===0&&u.k==='harv'&&!u.dead).length],['Dock',e.dockBy&&!e.dockBy.dead?'Unloading':'Free'])}
    else if(e.k==='radar'){ln.push(['Status',p0.low?'No power':'Online'],['Air support',p0.low?'Offline':p0.sw>0?Math.ceil(p0.sw)+'s':'Ready'])}
    else if(df.wk){ln.push(['Status',WD[df.wk].pw&&p0.low?'Offline':e.target?'Engaging '+nameOf(e.target.k,P[e.target.owner]?P[e.target.owner].fac:fac):'Scanning'])}
    else if(e.k==='power'){ln.push(['Grid load',p0.pwUsed+' / '+p0.pwMade])}
-   else if(e.k==='cy'){ln.push(['Note','Lose it and the operation fails'])}
+   else if(e.k==='cy'){/* JESSICA FIX START: 1-cpnote */ln.push(['Note',P.filter(q=>same(0,q.id)).length>1?'Lose every team CP and you lose':'Lose it and the operation fails'])/* JESSICA FIX END */}
    else if(e.k==='derrick'){ln.push(['Income','+$4/s'])}else if(e.k==='rbay'){ln.push(['Status',p0.low?'No power':'Repairing vehicles nearby'])}else if(e.k==='mine'){ln.push(['Status','Hidden from the enemy'])}else if(e.k==='air'){ln.push(['Hangar',units.filter(u=>u.owner===0&&u.land&&!u.dead).length+' landed'],['Queue',p0.q.a.length?nameOf(p0.q.a[0].k,fac)+' '+Math.round(p0.q.a[0].prog*100)+'%':'Idle'])}
   }
   h='<div class="sh"><div class="por"><canvas width="168" height="116"></canvas>'+(e.rank?'<span class="rk">'+(e.rank===2?'▲▲':'▲')+'</span>':'')+'</div><div class="sm"><div class="sn"><b>'+nameOf(e.k,fac)+'</b><em>'+(ROLE[e.k]||(e.k==='cy'?'Command':''))+'</em></div><div class="tg">'+tg.join('')+'</div><div class="hpb"><i style="width:'+f*100+'%;background:'+hc(f)+'"></i><span>'+Math.ceil(e.hp)+' / '+e.mhp+'</span></div></div></div>'
@@ -1711,7 +1914,7 @@ function hudTick(){campTick();$('view').classList.toggle('placing',!!placing);bm
  $('vForce').textContent=units.filter(u=>same(0,u.owner)).length+' U · '+blds.filter(b=>same(0,b.owner)).length+' B';
  $('vHost').textContent=units.filter(u=>!same(0,u.owner)&&visTo(p0,u)).length+' U · '+blds.filter(b=>b.owner!==NEU&&!same(0,b.owner)&&seenB(b)).length+' B';
  {const cond=since<10?['red','RED · UNDER FIRE']:(since<45||p0.low)?['amb',since<45?'AMBER · CONTACT':'AMBER · BROWNOUT']:['','GREEN · CLEAR'],ch='<i class="lamp '+cond[0]+'"></i>'+cond[1],el=$('vCond');if(el.dataset.h!==ch){el.dataset.h=ch;el.innerHTML=ch}}
- {const ec=blds.filter(b=>b.k==='cy'&&!b.dead&&b.owner!==NEU&&!same(0,b.owner)),n=ec.length,loc=ec.filter(b=>b.seen[0]).length,o=$('vObj');o.textContent='Enemy CPs · '+n+' left'+(n&&loc<n?' · '+loc+' found':'');o.style.color=!n?'var(--good)':loc?'var(--amber2)':'var(--fg)'}
+ {const ec=blds.filter(b=>b.k==='cy'&&!b.dead&&b.owner!==NEU&&!same(0,b.owner)),n=ec.length,loc=ec.filter(b=>b.seen[0]).length,o=$('vObj');o.textContent='Enemy CPs · '+n+' left'+(n&&loc<n?' · '+loc+' found':'');/* JESSICA FIX START: 1-topbar-cp */{const mc=blds.filter(b=>b.k==='cy'&&!b.dead&&b.owner!==NEU&&same(0,b.owner)).length;if(innerWidth<=780||innerHeight<=500)o.textContent='Enemy CPs '+n+(n&&loc<n?' ('+loc+' seen)':'');o.title='Win: destroy every enemy Command Post. Lose: your team has no Command Post left. Enemy CPs left: '+n+'. Your team CPs: '+mc+'.'}/* JESSICA FIX END */o.style.color=!n?'var(--good)':loc?'var(--amber2)':'var(--fg)'}
  if(gt-incT>=1){incT=gt;incH.push([gt,p0.stats.mined]);while(incH.length>1&&gt-incH[0][0]>30)incH.shift();const a=incH[0],z=incH[incH.length-1];incRate=z[0]-a[0]>1?(z[1]-a[1])/(z[0]-a[0])*60:0}
  $('inc').textContent='+$'+Math.round(incRate).toLocaleString()+'/min';
  {const hasR=!!p0.cnt.radar,on=hasR&&!p0.low;$('radarbox').classList.toggle('on',on);$('rst').textContent=on?'ONLINE':hasR?'NO POWER':'NO RADAR';$('rstl').className='lamp '+(on?'':hasR?'red':'off');$('rgrid').textContent=on&&mouse.in&&mouse.wx!==undefined?'CURSOR '+gridRef(mouse.wx,mouse.wy):'--'}
@@ -1907,7 +2110,7 @@ function updTree(){
 }
 function toggleTree(force){
  const t=$('tree'),open=force===undefined?t.hidden:force;if(open&&!P.length)return;
- if(open&&!treeBuilt)buildTree();t.hidden=!open;hideIntel();if(open){updTree();const sc=$('tscroll');sc.scrollTop=Math.max(0,(sc.scrollHeight-sc.clientHeight)/2)}
+ /* JESSICA FIX START: d-tree-faction */if(open&&(!treeBuilt||toggleTree.jf!==P[0].fac)){buildTree();toggleTree.jf=P[0].fac}/* JESSICA FIX END */t.hidden=!open;hideIntel();if(open){updTree();const sc=$('tscroll');sc.scrollTop=Math.max(0,(sc.scrollHeight-sc.clientHeight)/2)}
 }
 let intelK=null,intelEl=null,intelSpin=0,intelRaf=0;
 function allMax(f){let m=1;for(const k in UD)m=Math.max(m,f(UD[k])||0);for(const k in BD)m=Math.max(m,f(BD[k])||0);return m}
@@ -2128,7 +2331,7 @@ $('bHelpX').onclick=()=>{$('help').hidden=true};
 $('bSell').onclick=()=>{mode=mode==='sell'?null:'sell';placing=null;amoveOn=false;updSidebar()};
 $('bRep').onclick=()=>{mode=mode==='repair'?null:'repair';placing=null;amoveOn=false;updSidebar()};
 $('bSeed').onclick=()=>{$('seed').value=Math.floor(Math.random()*9000+100)};
-$('bAgain').onclick=()=>{$('end').hidden=true;$('menu').hidden=false;running=false;menuPreview()};
+$('bAgain').onclick=()=>{$('end').hidden=true;$('menu').hidden=false;running=false;menuPreview();/* JESSICA FIX START: p3-again-cont */ifRefreshCont();/* JESSICA FIX END */};
 $('bRedo').onclick=()=>{$('end').hidden=true;if(camp)campNext=camp.m;startGame()};
 $('bWatch').onclick=()=>{$('end').hidden=true};
 window.__end=function(win){
@@ -2281,6 +2484,63 @@ function selectArmy(){sel=units.filter(u=>!u.dead&&u.owner===0&&u.wk&&u.k!=='har
  $('mBase').onclick=()=>{const cy=blds.find(b=>b.owner===0&&b.k==='cy')||blds.find(b=>b.owner===0);if(cy)centerOn(cy.x,cy.y)};
  $('mCancel').onclick=()=>{rallyOn=false;placing=null;mode=null;amoveOn=false;P[0].armed=false;sel=[];$('hint').hidden=true;updSidebar()};
 }
+/* JESSICA FIX START: 4-3-js */
+// Bug 4: after the match, 'Keep looking' keeps the battle running. frame() skips step() while over is set,
+// so this small driver steps the sim itself only while over && running && the end card is closed.
+let jWatch=false,jWAcc=0,jWLast=0;
+function jWatchTick(t){
+ if(!jWatch)return;
+ if(!running||!over||!$('end').hidden){jWatch=false;return}
+ const dt=Math.min(.1,Math.max(0,(t-jWLast)/1000));jWLast=t;
+ const gm=document.getElementById('gmenu');
+ if(!paused&&!(gm&&!gm.hidden)){jWAcc+=dt*speed;let n=0;while(jWAcc>=TICK&&n<10){step();jWAcc-=TICK;n++}if(n>=10)jWAcc=0}
+ requestAnimationFrame(jWatchTick);
+}
+$('bWatch').addEventListener('click',()=>{if(jWatch||!over)return;jWatch=true;jWAcc=0;jWLast=performance.now();requestAnimationFrame(jWatchTick)});
+// Bug 3 / build menu: close button, auto-close after placing, reopen via Build button or re-tapping the unit,
+// collapse toggle for the selection panel (shown by the phone CSS only)
+{const bm=$('bmenu'),se=$('sel'),ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
+ if(ls('if_jsel')==='1')se.classList.add('jmin');
+ let closedFor=null,shiftDown=false;
+ const close=()=>{bm.classList.add('jclosed');closedFor=sel};
+ const reopen=()=>{bm.classList.remove('jclosed');closedFor=null};
+ window.addEventListener('keydown',e=>{if(e.key==='Shift')shiftDown=true});
+ window.addEventListener('keyup',e=>{if(e.key==='Shift')shiftDown=false});
+ window.addEventListener('blur',()=>{shiftDown=false});
+ // reopen when the selection changes (a new pick or tapping the same Engineer again makes a new sel array)
+ setInterval(()=>{if(closedFor&&sel!==closedFor)reopen()},120);
+ // hook after a successful player placement without touching tryPlace/placeSite: wrap the function binding
+ {const orig=placeSite;placeSite=function(p,k,tx,ty){const r=orig.apply(this,arguments);if(r&&p&&p.id===0&&!shiftDown)close();return r}}
+ const sync=()=>{const s=$('jSelT');if(s){const m=se.classList.contains('jmin');s.textContent=m?'▴':'▾';s.setAttribute('aria-expanded',String(!m))}};
+ const addX=()=>{const hd=bm.querySelector('.bmh');if(hd&&!hd.querySelector('#jBmX')){const b=document.createElement('button');b.type='button';b.id='jBmX';b.className='tb';b.title='Close build menu';b.setAttribute('aria-label','Close build menu');b.textContent='✕';hd.appendChild(b)}};
+ new MutationObserver(addX).observe(bm,{childList:true});addX();
+ // a tap that selects a unit can open the build row under the finger; ignore the synthetic click that follows
+ let shownAt=0;new MutationObserver(()=>{if(!bm.hidden)shownAt=performance.now()}).observe(bm,{attributes:true,attributeFilter:['hidden']});
+ bm.addEventListener('click',e=>{if(e.target.closest('#jBmX')){e.stopImmediatePropagation();close();return}if(performance.now()-shownAt<450){e.stopImmediatePropagation();e.preventDefault()}},true);
+ const bb=document.createElement('button');bb.type='button';bb.className='tb jbb';bb.id='jBuild';bb.textContent='Build';bb.title='Open the build menu';
+ $('selCmd').insertBefore(bb,$('selCmd').firstChild);bb.addEventListener('click',e=>{e.stopPropagation();reopen();bmSig=''});
+ const st=document.createElement('button');st.type='button';st.id='jSelT';st.className='tb jtg';st.setAttribute('aria-label','Show or hide selection details');se.appendChild(st);
+ st.addEventListener('click',e=>{e.stopPropagation();se.classList.toggle('jmin');ls('if_jsel',se.classList.contains('jmin')?'1':'0');sync()});
+ sync()
+ // P2-4 training queue hold/resume (C&C style) on the production menu:
+ // right-click / long-press the unit in production -> hold; again -> cancel + refund; left-click a held card -> resume
+ const head=k=>{const c=catOf(k);if(c!=='i'&&c!=='v'&&c!=='a')return null;const q=P[0]&&P[0].q[c];return q&&q[0]&&q[0].k===k?q:null};
+ const holdOrCancel=k=>{const q=head(k);if(!q)return false;const it=q[0];
+  if(!it.hold){it.hold=true;msg(nameOf(k,P[0].fac)+' on hold','good')}else{P[0].credits+=it.paid;q.shift();msg(nameOf(k,P[0].fac)+' cancelled, $'+Math.round(it.paid)+' refunded','good')}
+  bmSig='';updSidebar();return true};
+ let lpT=0,lpAt=0;
+ bm.addEventListener('contextmenu',e=>{const b=e.target.closest('[data-k]');if(!b||!running)return;
+  if(performance.now()-lpAt<700){e.preventDefault();e.stopImmediatePropagation();return}
+  if(holdOrCancel(b.dataset.k)){e.preventDefault();e.stopImmediatePropagation()}},true);
+ bm.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b||!running)return;
+  if(performance.now()-lpAt<700){e.preventDefault();e.stopImmediatePropagation();return}
+  const q=head(b.dataset.k);if(q&&q[0].hold){q[0].hold=false;msg(nameOf(b.dataset.k,P[0].fac)+' resumed','good');e.stopImmediatePropagation();bmSig='';updSidebar()}},true);
+ bm.addEventListener('pointerdown',e=>{if(e.pointerType!=='touch')return;const b=e.target.closest('[data-k]');if(!b)return;clearTimeout(lpT);
+  lpT=setTimeout(()=>{if(head(b.dataset.k)&&holdOrCancel(b.dataset.k))lpAt=performance.now()},550)});
+ for(const ev of ['pointerup','pointercancel','pointerleave'])bm.addEventListener(ev,()=>clearTimeout(lpT));
+ setInterval(()=>{if(bm.hidden)return;bm.querySelectorAll('.bi[data-k]').forEach(b=>{const q=head(b.dataset.k);b.classList.toggle('jhold',!!(q&&q[0].hold))})},150);
+}
+/* JESSICA FIX END */
 const MISS=[{n:'First Light',cfg:{mode:1,map:0,diff:0,fac:0,cr:6000,ai:1,crt:1,seed:7},
  brief:'Atlantic Coalition has landed a Command Post on the Crossroads plain, and a Federation outpost sits on the far side. Command wants a working base before the enemy finishes digging in: power, supplies, infantry, then armor. Once you can field a force, take the enemy Command Post. This enemy is green and slow, but its patrols will test an empty base.',
  objs:[
@@ -2537,7 +2797,31 @@ function ifRestore(d){
  sel=(dec(d.sel)||[]).filter(Boolean);groups=dec(d.groups)||{};for(const g in groups)groups[g]=(groups[g]||[]).filter(Boolean);
  camp=dec(d.camp)||null;oplog=dec(d.oplog)||[];incH=dec(d.incH)||[];incT=d.incT||0;incRate=d.incRate||0;
 }
-function ifHasSave(){try{const r=localStorage.getItem(IF_SAVE_KEY);if(!r)return null;const d=JSON.parse(r);return d&&d.v===IF_SAVE_VER?d:null}catch(e){return null}}
+/* JESSICA FIX START: p3-menu-js */
+function jSaveOk(d){try{const fin=x=>typeof x==='number'&&isFinite(x),ta=x=>!!x&&typeof x.$ta==='string'&&typeof x.d==='string';
+ return fin(d.at)&&d.at>0&&fin(d.gt)&&d.gt>=0&&!!d.cfg&&typeof d.cfg==='object'&&d.cfg.seed!=null&&[1,2,3,4].includes(+d.cfg.mode)&&
+  Number.isInteger(d.MW)&&d.MW>=32&&d.MW<=256&&Array.isArray(d.units)&&Array.isArray(d.blds)&&Array.isArray(d.P)&&d.P.length>=2&&Array.isArray(d.ais)&&
+  ['terr','blk','occ','ore'].every(k=>ta(d[k]))&&!!d.cam&&fin(d.cam.x)&&fin(d.cam.y)&&d.units.every(e=>e&&e.id!=null)&&d.blds.every(e=>e&&e.id!=null)}catch(e){return false}}
+const jMenuR=['mode','map','diff','fac','cr','ai','crt'];let jSkirm=null;
+const jStashMenu=()=>{const o={seed:$('seed').value};for(const n of jMenuR){const e=document.querySelector('input[name="'+n+'"]:checked');o[n]=e?e.value:null}return o};
+// 3) a save that still fails to load: toast, drop it, hide Continue, back to the menu
+{const o=ifLoad;ifLoad=function(){
+ const d=ifHasSave();if(d&&d.camp&&!jSkirm)jSkirm=jStashMenu();
+ jPend=[];
+ try{return o.apply(this,arguments)}catch(e){console.warn('save load failed',e);try{localStorage.removeItem(IF_SAVE_KEY)}catch(_){}
+  running=false;try{ifClearUI()}catch(_){}$('end').hidden=true;$('menu').hidden=false;try{menuPreview()}catch(_){}ifRefreshCont();ifToast('Save is damaged');return false}}}
+// 8) campaign briefing Deploy overwrites the skirmish radios: remember them and put them back when the menu returns
+{const g=$('bfGo'),o=g.onclick;g.onclick=function(e){if(!jSkirm)jSkirm=jStashMenu();return o.call(this,e)}}
+new MutationObserver(()=>{if($('menu').hidden||running||!jSkirm)return;const s=jSkirm;jSkirm=null;
+ for(const n of jMenuR)if(s[n]!=null)ifSetR(n,s[n]);$('seed').value=s.seed;try{advSum();menuPreview()}catch(_){}}).observe($('menu'),{attributes:true,attributeFilter:['hidden']});
+// 5) touch: hint text without "Right click", and placement ends after a successful tap-place
+{let touch=false;window.addEventListener('pointerdown',e=>{touch=e.pointerType==='touch'},true);
+ const hn=$('hint');new MutationObserver(()=>{if(!touch)return;const t=hn.textContent,n=t.replace(/Right click cancels\./g,'Tap Cancel to stop.').replace(/^Click /,'Tap ');if(n!==t)hn.textContent=n}).observe(hn,{childList:true,characterData:true,subtree:true});
+ const o=placeSite;placeSite=function(p){const r=o.apply(this,arguments);if(r&&touch&&p&&p.id===0){placing=null;hn.hidden=true}return r}}
+// 6) leaving placement re-clamps the camera (placement allows overscroll)
+{let was=false;setInterval(()=>{const now=!!placing;if(was&&!now&&running)clampCam();was=now},50)}
+/* JESSICA FIX END */
+function ifHasSave(){try{const r=localStorage.getItem(IF_SAVE_KEY);if(!r)return null;const d=JSON.parse(r);/* JESSICA FIX START: p3-save-shape */return d&&d.v===IF_SAVE_VER&&jSaveOk(d)?d:null/* JESSICA FIX END */}catch(e){return null}}
 function ifToast(t){const el=$('gtoast');el.textContent=t;el.classList.add('on');clearTimeout(ifToast.h);ifToast.h=setTimeout(()=>el.classList.remove('on'),1600)}
 function ifSave(auto){
  if(!running||over||!P.length)return false;
@@ -2622,7 +2906,7 @@ window.addEventListener('keydown',e=>{
  if(busy)return;
  e.preventDefault();e.stopImmediatePropagation();ifOpenMenu();
 },true);
-setInterval(()=>{if(running&&!over&&!ifMenuOpen&&Date.now()-ifLastSave>=55000)ifSave(true)},60000);
+/* JESSICA FIX START: p3-autosave */let jAutoFrom=0;setInterval(()=>{if(!running||over){jAutoFrom=0;return}if(!jAutoFrom)jAutoFrom=Date.now();if(!ifMenuOpen&&Date.now()-Math.max(ifLastSave,jAutoFrom)>=60000)ifSave(true)},5000);/* JESSICA FIX END */
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&running&&!over)ifSave(true)});
 window.addEventListener('pagehide',()=>{if(running&&!over)ifSave(true)});
 {const oe=window.__end;window.__end=w=>{try{localStorage.removeItem(IF_SAVE_KEY)}catch(e){}oe(w)}}
