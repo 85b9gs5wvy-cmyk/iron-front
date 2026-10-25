@@ -6,6 +6,14 @@
   </a>
 </p>
 
+<p align="center">
+  <a href="https://85b9gs5wvy-cmyk.github.io/iron-front/test.html">
+    <img src="https://img.shields.io/badge/%E2%96%B6%20PLAY%20TEST%20VERSION-ff8c1a?style=for-the-badge&labelColor=0b100d" alt="Play test version" height="60">
+  </a>
+</p>
+
 Runs right in your browser on desktop or phone. No install needed.
 
 **Play link:** https://85b9gs5wvy-cmyk.github.io/iron-front/
+
+**Test version** (in-game menu with save, restart and quit; Engineers can build anywhere): https://85b9gs5wvy-cmyk.github.io/iron-front/test.html
