@@ -16,4 +16,4 @@ Runs right in your browser on desktop or phone. No install needed.
 
 **Play link:** https://85b9gs5wvy-cmyk.github.io/iron-front/
 
-**Test version** (Detail Layer, Simple UI (incl. Radar/Info), 1–9 hotkeys, Ultra graphics slider, AI tuning, Market/Trade, Ashfall City, war-torn city pass (craters/wrecks/rubble), bottom dock HUD, inlined three.js; in-game menu with save, restart and quit; Engineers can build anywhere): https://85b9gs5wvy-cmyk.github.io/iron-front/test.html
+**Test version** (Detail Layer, Simple UI (incl. Radar/Info), 1–9 hotkeys, Ultra graphics slider, AI tuning, Market/Trade, Ashfall City, war-torn city pass (craters/wrecks/rubble), bottom dock HUD, inlined three.js; WASD camera pan (Attack-move Q, Stop E), Aegis Field support power, resource highlighting, infantry morale, side/rear vehicle armor, higher Ultra model detail, farther 3D zoom, starts moved inward, textured asphalt roads, small towns on the full city map; in-game menu with save, restart and quit; Engineers can build anywhere): https://85b9gs5wvy-cmyk.github.io/iron-front/test.html
